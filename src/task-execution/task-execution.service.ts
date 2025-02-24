@@ -4,6 +4,7 @@ import { UpdateTaskExecutionDto } from './dto/update-task-execution.dto';
 import { Repository } from 'typeorm';
 import { TaskExecution } from './entities/task-execution.entity';
 import { TaskService } from 'src/task/task.service';
+import { getLastSunday } from 'src/utils/getLastSunday';
 
 @Injectable()
 export class TaskExecutionService {
@@ -14,13 +15,13 @@ export class TaskExecutionService {
   ) { }
   async create(createTaskExecutionDto: CreateTaskExecutionDto) {
     const task = await this.taskService.findOne(createTaskExecutionDto.taskId);
-    const hasExecution = await this.taskExecutionRepository.countBy({ task: { id: task.id }, week: this.getLastSunday(createTaskExecutionDto.week) });
+    const hasExecution = await this.taskExecutionRepository.countBy({ task: { id: task.id }, week: getLastSunday(createTaskExecutionDto.week) });
     if (hasExecution > 0) {
       throw new InternalServerErrorException('Execução nesta semana já existe');
     }
 
     const taskExecution = this.taskExecutionRepository.create({
-      week: this.getLastSunday(createTaskExecutionDto.week),
+      week: getLastSunday(createTaskExecutionDto.week),
       completed: createTaskExecutionDto.completed ?? false,
       task
     })
@@ -53,14 +54,4 @@ export class TaskExecutionService {
     return await this.taskExecutionRepository.delete(id);
   }
 
-  private getLastSunday(day?: Date): Date {
-    const today = day ? new Date(day) : new Date();
-    const dayOfWeek = today.getDay(); // 0 (domingo) a 6 (sábado)
-    const lastSunday = new Date(today);
-
-    lastSunday.setDate(today.getDate() - dayOfWeek);
-    lastSunday.setHours(0, 0, 0, 0); // Resetando para meia-noite
-
-    return lastSunday;
-  }
 }
