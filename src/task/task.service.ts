@@ -3,6 +3,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Repository } from 'typeorm';
 import { Task } from './entities/task.entity';
+import { getLastSunday } from 'src/utils/getLastSunday';
 
 @Injectable()
 export class TaskService {
@@ -18,7 +19,11 @@ export class TaskService {
   }
 
   async findAll() {
-    return await this.taskRepository.find();
+    return await this.taskRepository.find({
+      relations: {
+        executions: true
+      }
+    });
   }
 
   async findOne(id: string) {
@@ -31,9 +36,9 @@ export class TaskService {
 
   async update(id: string, updateTaskDto: UpdateTaskDto) {
     await this.taskRepository.update(id, updateTaskDto)
-    .catch((err) => {
-      throw new InternalServerErrorException('problemas ao atualizar uma tarefa');
-    });
+      .catch((err) => {
+        throw new InternalServerErrorException('problemas ao atualizar uma tarefa');
+      });
     return await this.findOne(id);
   }
 

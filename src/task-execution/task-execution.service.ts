@@ -14,17 +14,18 @@ export class TaskExecutionService {
     private taskService: TaskService
   ) { }
   async create(createTaskExecutionDto: CreateTaskExecutionDto) {
+    const week = getLastSunday(createTaskExecutionDto.week)
     const task = await this.taskService.findOne(createTaskExecutionDto.taskId);
-    const hasExecution = await this.taskExecutionRepository.countBy({ task: { id: task.id }, week: getLastSunday(createTaskExecutionDto.week) });
+    const hasExecution = await this.taskExecutionRepository.countBy({ task: { id: task.id }, week });
     if (hasExecution > 0) {
       throw new InternalServerErrorException('Execução nesta semana já existe');
     }
 
     const taskExecution = this.taskExecutionRepository.create({
-      week: getLastSunday(createTaskExecutionDto.week),
+      week,
       completed: createTaskExecutionDto.completed ?? false,
       task
-    })
+    });
     return await this.taskExecutionRepository.save(taskExecution).catch((err) => {
       throw new InternalServerErrorException('Problemas ao definir uma execução')
     });
