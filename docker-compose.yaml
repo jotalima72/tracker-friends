@@ -1,0 +1,52 @@
+services:
+  tracker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tracker
+    ports:
+      - '3000:3000'
+    environment:
+      - POSTGRES_CONNECTION_URL=postgresql://myuser:mypassword@postgres-tracker/tracker
+      - PORT=3000
+    depends_on:
+      - postgres-tracker
+      - pgadmin-tracker
+    networks:
+      - tracker-network
+
+  postgres-tracker:
+    image: postgres:15
+    container_name: postgres-tracker
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: tracker
+      PGDATA: /data/postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - tracker-network
+
+  pgadmin-tracker:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: pgadmin4-tracker
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin4
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres-tracker
+    networks:
+      - tracker-network
+
+networks:
+  tracker-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
