@@ -33,7 +33,7 @@ export class TaskService {
     await this.taskRepository.update(id, updateTaskDto)
     .catch((err) => {
       throw new InternalServerErrorException('problemas ao atualizar uma tarefa');
-    });;
+    });
     return await this.findOne(id);
   }
 
