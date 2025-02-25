@@ -6,9 +6,10 @@ import { ConfigService } from './config/config.service';
 import { TaskExecutionModule } from './task-execution/task-execution.module';
 import { DatabaseModule } from './database/database.module';
 import { ScoreModule } from './score/score.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [TaskModule, TaskExecutionModule, DatabaseModule, ScoreModule],
+  imports: [TaskModule, TaskExecutionModule, DatabaseModule, ScoreModule, UsersModule],
   controllers: [AppController],
   providers: [AppService, ConfigService],
 })

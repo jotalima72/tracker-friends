@@ -6,8 +6,6 @@ export class TaskExecution {
   constructor(partial: Partial<TaskExecution>) {
     Object.assign(this, partial);
   }
-  // @ManyToOne(() => User, (user) => user.taskExecutions, { onDelete: 'CASCADE' })
-  // user: User;
 
   @ManyToOne(() => Task, { onDelete: 'CASCADE' })
   task: Task;

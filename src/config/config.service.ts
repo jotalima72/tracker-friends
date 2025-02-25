@@ -7,7 +7,8 @@ export class ConfigService {
 
   constructor() {
     this.envConfig = {};
-    this.envConfig.postgresURL = process.env.POSTGRES_CONNECTION_URL
+    this.envConfig.postgresURL = process.env.POSTGRES_CONNECTION_URL;
+    this.envConfig.bcrypt_salt = process.env.BCRYPT_SALT
   }
 
   get(key: string): any {

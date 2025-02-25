@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn, Unique, UpdateDateColumn } from "typeorm";
 import { ScoreQnt } from "../dto/score.enum";
+import { User } from "src/users/entities/user.entity";
 
 @Entity()
 // @Unique(['week', 'user'])
@@ -7,8 +8,8 @@ export class Score {
   constructor(partial: Partial<Score>) {
     Object.assign(this, partial);
   }
-  // @ManyToOne(() => User, { onDelete: 'CASCADE' })
-  // user: User;
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  user: User;
 
   @Column({ type: 'date' })
   week: Date; // Representa a semana da pontuação
