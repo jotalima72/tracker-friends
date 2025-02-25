@@ -31,15 +31,21 @@ export class UsersService {
     return await this.userRepository.find();
   }
 
-  async findOne(id: string) {
-    const user = await this.userRepository.createQueryBuilder('users')
+  async findOne(id: string): Promise<User> {
+    return await this.userRepository.createQueryBuilder('users')
       .where('users.id = :id', { id })
-      .leftJoinAndSelect('users.scores', 'scores')
       .getOneOrFail()
       .catch((err) => {
         throw new NotFoundException('Usuario não encontrado');
       });
-    return instanceToPlain(user);
+  }
+
+  async findOneWithRelations(id: string){
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['scores', 'tasks', 'tasks.executions']
+    });
+    return instanceToPlain(user) as User;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
