@@ -4,20 +4,27 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('tasks')
+@ApiTags('Tasks')
 @Controller('tasks')
 export class TaskController {
-  constructor(private readonly taskService: TaskService) {}
+  constructor(private readonly taskService: TaskService) { }
 
   @ApiOperation({ summary: 'Criação de uma nova tarefa' })
   @Post()
   create(@Body() createTaskDto: CreateTaskDto) {
     return this.taskService.create(createTaskDto);
   }
+
   @ApiOperation({ summary: 'Lista todas as tarefas' })
   @Get()
   findAll() {
     return this.taskService.findAll();
+  }
+
+  @ApiOperation({ summary: 'Lista todas as tarefas de um usuário' })
+  @Get('user/:userId')
+  findAllByUser(@Param('userId') userId: string) {
+    return this.taskService.findAllByUserId(userId);
   }
 
   @ApiOperation({ summary: 'Busca uma tarefa pelo id' })

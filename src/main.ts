@@ -12,6 +12,10 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle('tracker dos amiguinhos API docs')
     .setDescription('Documentação da API do medidor de tarefas')
+    .addTag('Users')
+    .addTag('Tasks')
+    .addTag('TaskExecution')
+    .addTag('Score')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, options);
