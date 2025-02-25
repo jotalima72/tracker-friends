@@ -19,17 +19,19 @@ export class ScoreService {
   async create(createScoreDto: CreateScoreDto) {
     const week = getLastSunday(createScoreDto.week)
     const [tasks, user] = await Promise.all([this.taskService.findAllByUserId(createScoreDto.userId), await this.userService.findOne(createScoreDto.userId)]);
-    const scoreExists = await this.scoreRepository.findOneBy({ user: { id: user.id }, week });
-    if (scoreExists) {
-      await this.deleteUserScore(user.id, week);
+    let score = await this.scoreRepository.createQueryBuilder('score')
+      .where('score.user = :userId', { userId: user.id })
+      .andWhere('score.week = :week', { week: week })
+      .getOne();
+    if (!score) {
+      score = this.scoreRepository.create({
+        week: getLastSunday(createScoreDto.week),
+        score: ScoreQnt.ZERO
+      });
+      score.user = user;
     }
-    const score = this.scoreRepository.create({
-      week: getLastSunday(createScoreDto.week),
-      score: ScoreQnt.ZERO
-    });
     let executionsNumber = this.calculateExecutionsInAWeek(tasks, week);
     score.score = this.checkExecutions(executionsNumber, tasks.length);
-    score.user = user;
     return await this.scoreRepository.save(score);
   }
 
