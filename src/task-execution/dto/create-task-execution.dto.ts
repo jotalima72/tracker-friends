@@ -19,7 +19,6 @@ export class CreateTaskExecutionDto {
   })
   @Transform(({ value }) => value ? new Date(value) : null)
   @IsDate()
-  @IsEmpty()
   week?: Date;
 
   @ApiProperty({

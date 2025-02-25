@@ -1,6 +1,5 @@
 import { Expose } from "class-transformer";
 import { Score } from "src/score/entities/score.entity";
-import { TaskExecution } from "src/task-execution/entities/task-execution.entity";
 import { Task } from "src/task/entities/task.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 

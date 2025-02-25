@@ -10,6 +10,7 @@ export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
   title: string;
+
   @ApiProperty({
     type: String,
     description: 'Descrição da tarefa',
@@ -18,4 +19,13 @@ export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
   description: string;
+
+  @ApiProperty({
+    type: String,
+    description: 'ID do usuario',
+    example: 'User_id',
+  })
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
 }

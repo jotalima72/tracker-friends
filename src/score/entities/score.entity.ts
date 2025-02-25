@@ -3,7 +3,7 @@ import { ScoreQnt } from "../dto/score.enum";
 import { User } from "src/users/entities/user.entity";
 
 @Entity()
-// @Unique(['week', 'user'])
+@Unique(['week', 'user'])
 export class Score {
   constructor(partial: Partial<Score>) {
     Object.assign(this, partial);

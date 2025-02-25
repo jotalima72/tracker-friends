@@ -4,12 +4,12 @@ import { IsDate, IsNotEmpty } from "class-validator";
 import { ScoreQnt } from "./score.enum";
 
 export class CreateScoreDto {
-  // @ApiProperty({
-  //   type: String,
-  //   description: 'Id do usuário',
-  //   example: 'User_id',
-  // })
-  // userId: string;
+  @ApiProperty({
+    type: String,
+    description: 'Id do usuário',
+    example: 'User_id',
+  })
+  userId: string;
 
   @ApiProperty({
     type: Date,

@@ -4,15 +4,19 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { Repository } from 'typeorm';
 import { Task } from './entities/task.entity';
 import { getLastSunday } from 'src/utils/getLastSunday';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class TaskService {
   constructor(
     @Inject('TASK_REPOSITORY')
-    private taskRepository: Repository<Task>
+    private taskRepository: Repository<Task>,
+    private userService: UsersService
   ) { }
   async create(createTaskDto: CreateTaskDto) {
+    const user = await this.userService.findOne(createTaskDto.userId);
     const task = this.taskRepository.create(createTaskDto);
+    task.user = user;
     return await this.taskRepository.save(task).catch((err) => {
       throw new InternalServerErrorException('problemas ao criar uma tarefa');
     });
@@ -22,6 +26,20 @@ export class TaskService {
     return await this.taskRepository.find({
       relations: {
         executions: true
+      }
+    });
+  }
+
+  async findAllByUserId(userId: string) {
+    const user = await this.userService.findOne(userId);
+    return await this.taskRepository.find({
+      relations: {
+        executions: true
+      },
+      where: {
+        user: {
+          id: user.id
+        }
       }
     });
   }
