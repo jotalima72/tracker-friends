@@ -27,8 +27,8 @@ export class ScoreController {
 
   @ApiOperation({ summary: 'retorna o leaderboard de uma competição - inoperante' })
   @Get('/leaderboard/:competitionId')
-  getLeaderboard(@Param('competitionId') competitionId: string) {
-    return this.scoreService.getLeaderboard(competitionId);
+  getLeaderboard() {
+    return this.scoreService.getLeaderboard();
   }
 
   @ApiOperation({ summary: 'Deleta um score de um usuário' })

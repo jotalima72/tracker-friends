@@ -99,7 +99,18 @@ export class ScoreService {
     return await this.scoreRepository.delete(score.id)
   }
 
-  async getLeaderboard(competitionId: string) {
-    throw new Error('Method not implemented.');
+  async getLeaderboard() {
+    const users = await this.userService.findAll();
+    const scores = await Promise.all(users.map(async (user) => {
+      const score = await this.getUserScore(user.id);
+      return {
+        user: {
+          id: user.id,
+          name: user.name
+        },
+        score: score.score
+      }
+    }));
+    return scores.sort((a, b) => b.score - a.score);
   }
 }
