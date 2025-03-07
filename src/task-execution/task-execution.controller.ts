@@ -2,8 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TaskExecutionService } from './task-execution.service';
 import { CreateTaskExecutionDto } from './dto/create-task-execution.dto';
 import { UpdateTaskExecutionDto } from './dto/update-task-execution.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('task-execution')
 export class TaskExecutionController {
   constructor(private readonly taskExecutionService: TaskExecutionService) {}

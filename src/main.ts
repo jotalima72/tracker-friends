@@ -12,11 +12,20 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle('tracker dos amiguinhos API docs')
     .setDescription('Documentação da API do medidor de tarefas')
+    .addTag('Auth')
     .addTag('Users')
     .addTag('Tasks')
     .addTag('TaskExecution')
     .addTag('Score')
     .setVersion('1.0')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      name: 'JWT',
+      description: 'Enter JWT token',
+      in: 'header',
+    })
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);

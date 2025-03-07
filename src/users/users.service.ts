@@ -31,6 +31,21 @@ export class UsersService {
     return await this.userRepository.find();
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    return await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email })
+      .select([
+        'user.id',
+        'user.email',
+        'user.password',
+      ])
+      .getOneOrFail()
+      .catch(() => {
+        throw new NotFoundException('Usuário não encontrado');
+      });
+  }
+
   async findOne(id: string): Promise<User> {
     return await this.userRepository.createQueryBuilder('users')
       .where('users.id = :id', { id })
@@ -40,7 +55,7 @@ export class UsersService {
       });
   }
 
-  async findOneWithRelations(id: string){
+  async findOneWithRelations(id: string) {
     const user = await this.userRepository.findOne({
       where: { id },
       relations: ['scores', 'tasks', 'tasks.executions']
