@@ -41,6 +41,11 @@ export class TaskService {
           id: user.id
         }
       },
+      order: {
+        executions: {
+          week: 'DESC'
+        }
+      }
     });
   }
 
