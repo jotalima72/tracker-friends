@@ -40,12 +40,24 @@ export class TaskService {
         user: {
           id: user.id
         }
-      }
+      },
     });
   }
 
   async findOne(id: string) {
-    return await this.taskRepository.findOneByOrFail({ id }).catch(
+    return await this.taskRepository.findOneOrFail({
+      where: {
+        id
+      },
+      relations: {
+        executions: true
+      },
+      order: {
+        executions: {
+          week: 'DESC'
+        }
+      }
+    }).catch(
       (err) => {
         throw new NotFoundException('tarefa não encontrada');
       }
