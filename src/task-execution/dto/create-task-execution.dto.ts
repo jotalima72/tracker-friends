@@ -11,13 +11,14 @@ export class CreateTaskExecutionDto {
   @IsString()
   @IsNotEmpty()
   taskId: string;
+  
   @ApiProperty({
     type: Date,
     description: 'Data da semana da execução',
     example: '2025-02-19',
     required: false
   })
-  @Transform(({ value }) => value ? new Date(value) : null)
+  @Transform(({ value }) => value ? new Date(value) : new Date())
   @IsDate()
   week?: Date;
 
